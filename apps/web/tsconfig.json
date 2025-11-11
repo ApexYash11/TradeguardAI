@@ -19,7 +19,10 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@tradeguard/ui/*": ["../../packages/ui/*"],
+      "@tradeguard/hooks/*": ["../../packages/hooks/*"],
+      "@tradeguard/lib/*": ["../../packages/lib/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

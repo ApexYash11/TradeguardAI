@@ -1,10 +1,85 @@
 # TradeGuardAI - Trade Disruption Monitoring Platform
 
-A full-stack prototype for monitoring global trade disruptions and supply chain risks in real-time.
+A full-stack monorepo for monitoring global trade disruptions and supply chain risks in real-time.
+
+## 📁 Project Structure
+
+```
+tradeguard-ai/
+├── apps/
+│   └── web/                 # Next.js frontend application
+│       ├── app/             # Next.js 13+ app directory (routes)
+│       ├── public/          # Static assets
+│       ├── styles/          # Global styles
+│       └── package.json     # Web app dependencies
+│
+├── services/
+│   └── api/                 # FastAPI backend service
+│       ├── routes/          # API route handlers
+│       ├── main.py          # FastAPI app entry point
+│       ├── database.py      # Database configuration
+│       ├── models.py        # SQLAlchemy models
+│       ├── seed_data.py     # Mock data generator
+│       └── requirements.txt # Python dependencies
+│
+├── packages/                # Shared packages (monorepo)
+│   ├── ui/                  # React UI components library
+│   │   ├── ui/              # Base shadcn/ui components
+│   │   └── *.tsx            # Custom business components
+│   ├── hooks/               # Shared React hooks
+│   │   ├── use-auth.ts
+│   │   ├── use-websocket.ts
+│   │   └── use-toast.ts
+│   └── lib/                 # Shared utilities
+│       └── utils.ts         # Helper functions (cn, etc.)
+│
+├── infra/                   # Infrastructure & DevOps
+│   ├── docker-compose.yml   # Local development setup
+│   ├── Dockerfile.prod      # Production Docker image
+│   └── nginx.conf           # Nginx reverse proxy config
+│
+├── .github/
+│   └── workflows/           # CI/CD pipelines
+│
+├── pnpm-workspace.yaml      # PNPM workspace configuration
+├── .gitattributes           # Git line ending normalization
+├── .editorconfig            # Editor consistency settings
+└── README.md                # This file
+```
 
 ## Architecture
 
-\`\`\`
+This is a **monorepo** managed by PNPM workspaces:
+
+- **apps/web** - Next.js 16 frontend with App Router
+- **services/api** - FastAPI Python backend
+- **packages/ui** - Shared React component library
+- **packages/hooks** - Shared React hooks
+- **packages/lib** - Shared utilities
+
+### Technology Stack
+
+**Frontend:**
+- Next.js 16 (React 19)
+- TypeScript
+- Tailwind CSS 4
+- Radix UI primitives
+- Recharts for data visualization
+- shadcn/ui component system
+
+**Backend:**
+- Python 3.11+
+- FastAPI
+- SQLAlchemy
+- SQLite (development)
+- Uvicorn ASGI server
+
+**DevOps:**
+- Docker & Docker Compose
+- GitHub Actions (CI/CD)
+- Nginx (reverse proxy)
+
+```
 TradeGuardAI/
 ├── backend/              # FastAPI service
 │   ├── main.py
@@ -21,7 +96,7 @@ TradeGuardAI/
 │   └── Dockerfile
 ├── docker-compose.yml
 └── README.md
-\`\`\`
+```
 
 ## Features
 
@@ -40,8 +115,52 @@ TradeGuardAI/
 ## Quick Start
 
 ### Prerequisites
-- Docker and Docker Compose
-- Or: Node.js 18+, Python 3.11+
+- **Node.js** 18+ and **pnpm** 8+
+- **Python** 3.11+
+- **Docker** and **Docker Compose** (optional, for containerized setup)
+
+### Option 1: Local Development (Recommended)
+
+**1. Install dependencies:**
+```bash
+# Install all workspace dependencies
+pnpm install
+```
+
+**2. Start the backend API:**
+```bash
+# From project root
+pnpm dev:api
+
+# Or manually:
+cd services/api
+pip install -r requirements.txt
+python -m uvicorn main:app --reload
+```
+
+Backend runs on http://localhost:8000
+
+**3. Start the frontend (in a new terminal):**
+```bash
+# From project root
+pnpm dev
+
+# Or manually:
+cd apps/web
+pnpm dev
+```
+
+Frontend runs on http://localhost:3000
+
+### Option 2: Docker Compose
+
+\`\`\`bash
+pnpm docker:up
+\`\`\`
+
+Then visit:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
 
 ### Option 1: Docker Compose (Recommended)
 
@@ -121,6 +240,68 @@ vercel deploy
 4. Deploy
 
 ## Development
+
+### Monorepo Commands
+
+```bash
+# Install all dependencies
+pnpm install
+
+# Run frontend dev server
+pnpm dev
+# or
+pnpm dev:web
+
+# Run backend dev server
+pnpm dev:api
+
+# Build frontend for production
+pnpm build
+
+# Lint frontend code
+pnpm lint
+
+# Docker commands
+pnpm docker:up      # Start all services
+pnpm docker:down    # Stop all services
+pnpm docker:build   # Rebuild images
+```
+
+### Working with Packages
+
+The monorepo uses **PNPM workspaces**. Shared code is organized into packages:
+
+**@tradeguard/ui** - UI components
+```tsx
+import { Button } from '@tradeguard/ui/ui/button'
+import { EventFeed } from '@tradeguard/ui/event-feed'
+```
+
+**@tradeguard/hooks** - React hooks
+```tsx
+import { useAuth } from '@tradeguard/hooks/use-auth'
+import { useWebSocket } from '@tradeguard/hooks/use-websocket'
+```
+
+**@tradeguard/lib** - Utilities
+```tsx
+import { cn } from '@tradeguard/lib/utils'
+```
+
+### Adding New Dependencies
+
+```bash
+# Add to web app
+cd apps/web
+pnpm add <package-name>
+
+# Add to ui package
+cd packages/ui
+pnpm add <package-name>
+
+# Add to root (workspace tools)
+pnpm add -w <package-name>
+```
 
 ### Adding More Mock Data
 Edit `backend/seed_data.py` and restart the backend.

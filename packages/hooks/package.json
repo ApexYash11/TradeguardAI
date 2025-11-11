@@ -1,0 +1,17 @@
+{
+  "name": "@tradeguard/hooks",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    "./*": "./*"
+  },
+  "dependencies": {
+    "react": "19.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "typescript": "^5"
+  }
+}
