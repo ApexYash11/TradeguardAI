@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from backend.database import get_db
-from backend.models import SKU
+from database import get_db
+from models import SKU
 
 router = APIRouter()
 

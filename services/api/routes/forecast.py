@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 from datetime import datetime, timedelta
 import random
-from backend.database import get_db
-from backend.models import Forecast, ForecastPoint
+from database import get_db
+from models import Forecast, ForecastPoint
 
 router = APIRouter()
 

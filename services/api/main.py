@@ -1,11 +1,17 @@
+import sys
+from pathlib import Path
+
+# Add the services/api directory to Python path
+sys.path.insert(0, str(Path(__file__).parent))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from contextlib import asynccontextmanager
 import sqlite3
 from pathlib import Path
-from backend.database import init_db
-from backend.routes import events, forecast, skus, health, analytics, ports, news, websocket, auth
+from database import init_db
+from routes import events, forecast, skus, health, analytics, ports, news, websocket, auth
 
 # Initialize database on startup
 @asynccontextmanager

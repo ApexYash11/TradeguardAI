@@ -1,6 +1,8 @@
 import sqlite3
 from pathlib import Path
-from backend.seed_data import seed_database
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, declarative_base
+from seed_data import seed_database
 
 DB_PATH = Path(__file__).parent / "trade_guard.db"
 

@@ -47,286 +47,104 @@ tradeguard-ai/
 └── README.md                # This file
 ```
 
-## Architecture
+## 🏗️ Architecture
 
-This is a **monorepo** managed by PNPM workspaces:
-
-- **apps/web** - Next.js 16 frontend with App Router
-- **services/api** - FastAPI Python backend
-- **packages/ui** - Shared React component library
-- **packages/hooks** - Shared React hooks
-- **packages/lib** - Shared utilities
-
-### Technology Stack
-
-**Frontend:**
-- Next.js 16 (React 19)
-- TypeScript
-- Tailwind CSS 4
-- Radix UI primitives
-- Recharts for data visualization
-- shadcn/ui component system
-
-**Backend:**
-- Python 3.11+
-- FastAPI
-- SQLAlchemy
-- SQLite (development)
-- Uvicorn ASGI server
-
-**DevOps:**
-- Docker & Docker Compose
-- GitHub Actions (CI/CD)
-- Nginx (reverse proxy)
+**Monorepo Structure** (managed by PNPM workspaces):
 
 ```
 TradeGuardAI/
-├── backend/              # FastAPI service
-│   ├── main.py
-│   ├── database.py
-│   ├── models.py
-│   ├── seed_data.py
-│   ├── routes/
-│   ├── Dockerfile
-│   └── requirements.txt
-├── frontend/             # Next.js dashboard
-│   ├── app/
-│   ├── components/
-│   ├── package.json
-│   └── Dockerfile
-├── docker-compose.yml
-└── README.md
+├── apps/
+│   └── web/              # Next.js 16 frontend (React 19, Tailwind CSS 4)
+├── services/
+│   └── api/              # FastAPI backend (Python 3.11+, SQLite)
+├── packages/
+│   ├── ui/               # Shared React components (shadcn/ui)
+│   ├── hooks/            # Shared React hooks
+│   └── lib/              # Shared utilities
+└── infra/                # Docker & deployment configs
 ```
 
-## Features
+**Tech Stack:**
+- Frontend: Next.js 16, TypeScript, Tailwind CSS 4, Radix UI, Recharts
+- Backend: FastAPI, SQLAlchemy, Uvicorn
+- Infrastructure: Docker, GitHub Actions
 
-### Frontend
-- **Global Dashboard** - Real-time event feed, risk map, and top-risk SKUs
-- **Event Details** - Drill-down view for individual trade disruptions
-- **SKU Forecasts** - 30-day risk predictions with trend analysis
-- **Risk Color Coding** - Green (Stable), Yellow (Caution), Red (Critical)
+## 📋 Features
 
-### Backend
-- **REST API** with CORS support
-- **SQLite Database** with 10 mock events and 5 SKUs
-- **Mock Forecast Engine** - Generates realistic 30-day risk trends
-- **Health Check Endpoint** - Service monitoring
+**Dashboard:**
+- 🌍 Real-time event feed with risk map
+- 📊 30-day risk forecasts for SKUs
+- 🔔 Event notifications
+- 📈 Multi-SKU analytics
 
-## Quick Start
+**Analytics:**
+- 📉 Risk trend analysis
+- 🎯 Sentiment analysis
+- 📑 Custom report builder
+- 🔍 Advanced filtering
+
+**Data:**
+- 10 mock trade disruption events
+- 5 SKUs with risk profiles
+- Real-time WebSocket updates
+
+## ⚡ Quick Start
 
 ### Prerequisites
-- **Node.js** 18+ and **pnpm** 8+
+- **Node.js** 18+ & **pnpm** 8+
 - **Python** 3.11+
-- **Docker** and **Docker Compose** (optional, for containerized setup)
+- **Docker** (optional)
 
-### Option 1: Local Development (Recommended)
+### 🚀 Local Development (5 minutes)
 
-**1. Install dependencies:**
 ```bash
-# Install all workspace dependencies
+# 1. Install frontend dependencies
 pnpm install
-```
 
-**2. Start the backend API:**
-```bash
-# From project root
-pnpm dev:api
-
-# Or manually:
+# 2. Initialize database (Terminal 1)
 cd services/api
-pip install -r requirements.txt
+python seed_data.py
+
+# 3. Start backend (keep Terminal 1 running)
 python -m uvicorn main:app --reload
+# → http://127.0.0.1:8000
+
+# 4. Start frontend (Terminal 2)
+cd ../..
+pnpm dev
+# → http://localhost:3000
 ```
 
-Backend runs on http://localhost:8000
+### 🐳 Docker (Alternative)
 
-**3. Start the frontend (in a new terminal):**
 ```bash
-# From project root
-pnpm dev
-
-# Or manually:
-cd apps/web
-pnpm dev
-```
-
-Frontend runs on http://localhost:3000
-
-### Option 2: Docker Compose
-
-\`\`\`bash
-pnpm docker:up
-\`\`\`
-
-Then visit:
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
-
-### Option 1: Docker Compose (Recommended)
-
-\`\`\`bash
+cd infra
 docker-compose up
-\`\`\`
-
-Then visit:
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
-
-### Option 2: Local Development
-
-**Backend:**
-\`\`\`bash
-cd backend
-pip install -r requirements.txt
-uvicorn main:app --reload
-\`\`\`
-
-Backend runs on http://localhost:8000
-
-**Frontend:**
-\`\`\`bash
-cd frontend
-npm install
-npm run dev
-\`\`\`
-
-Frontend runs on http://localhost:3000
-
-## API Endpoints
-
-- `GET /api/health` - Health check
-- `GET /api/events` - List recent events (limit: 10)
-- `GET /api/events/{id}` - Get event details
-- `GET /api/sku` - List all SKUs (sorted by risk)
-- `GET /api/sku/{id}` - Get SKU details
-- `GET /api/forecast/{sku_id}` - Get 30-day risk forecast
-
-## Mock Data
-
-### Events (10 total)
-Real-world trade disruption scenarios:
-- Port strikes and labor disputes
-- Weather delays and natural disasters
-- Geopolitical disruptions
-- Canal congestion and vessel incidents
-
-### SKUs (5 total)
-- Consumer Electronics
-- Crude Oil
-- Wheat & Cereals
-- Automotive Components
-- Pharmaceuticals
-
-## Environment Variables
-
-### Frontend
-- `NEXT_PUBLIC_API_URL` - Backend API URL (default: http://localhost:8000)
-
-### Backend
-- `DATABASE_URL` - SQLite path (default: trade_guard.db)
-
-## Deployment
-
-### Frontend → Vercel
-\`\`\`bash
-npm run build
-vercel deploy
-\`\`\`
-
-### Backend → Render/Railway/AWS
-1. Push backend folder to GitHub
-2. Connect to Render/Railway
-3. Set environment variables
-4. Deploy
-
-## Development
-
-### Monorepo Commands
-
-```bash
-# Install all dependencies
-pnpm install
-
-# Run frontend dev server
-pnpm dev
-# or
-pnpm dev:web
-
-# Run backend dev server
-pnpm dev:api
-
-# Build frontend for production
-pnpm build
-
-# Lint frontend code
-pnpm lint
-
-# Docker commands
-pnpm docker:up      # Start all services
-pnpm docker:down    # Stop all services
-pnpm docker:build   # Rebuild images
+# Frontend: http://localhost:3000
+# Backend: http://localhost:8000
 ```
 
-### Working with Packages
+**That's it!** Visit http://localhost:3000 to see the dashboard.
 
-The monorepo uses **PNPM workspaces**. Shared code is organized into packages:
+---
 
-**@tradeguard/ui** - UI components
-```tsx
-import { Button } from '@tradeguard/ui/ui/button'
-import { EventFeed } from '@tradeguard/ui/event-feed'
+## 📡 API Endpoints
+
+Base URL: `http://localhost:8000`
+
+```
+GET  /api/health                    # Health check
+GET  /api/events                    # List events (limit: 10)
+GET  /api/events/{id}               # Event details
+GET  /api/sku                       # List SKUs (sorted by risk)
+GET  /api/sku/{id}                  # SKU details
+GET  /api/forecast/{sku_id}         # 30-day risk forecast
+GET  /api/analytics/gtri            # Global Trade Risk Index
+GET  /docs                          # Interactive API docs
 ```
 
-**@tradeguard/hooks** - React hooks
-```tsx
-import { useAuth } from '@tradeguard/hooks/use-auth'
-import { useWebSocket } from '@tradeguard/hooks/use-websocket'
-```
+---
 
-**@tradeguard/lib** - Utilities
-```tsx
-import { cn } from '@tradeguard/lib/utils'
-```
+## � License
 
-### Adding New Dependencies
-
-```bash
-# Add to web app
-cd apps/web
-pnpm add <package-name>
-
-# Add to ui package
-cd packages/ui
-pnpm add <package-name>
-
-# Add to root (workspace tools)
-pnpm add -w <package-name>
-```
-
-### Adding More Mock Data
-Edit `backend/seed_data.py` and restart the backend.
-
-### Customizing Colors
-Edit `app/globals.css` design tokens for the risk color scheme.
-
-### Adding Real Data Integration
-Replace API endpoints in components to connect to live data sources.
-
-## Status
-
-✅ Backend API with mock data
-✅ Frontend dashboard with real-time UI
-✅ Event and SKU detail pages
-✅ Risk forecasting
-✅ Docker setup
-⚠️ Real data ingestion (next version)
-⚠️ User authentication (future)
-⚠️ Advanced ML predictions (future)
-
-## Next Steps
-
-1. Configure environment variables in Vercel/hosting
-2. Deploy frontend and backend separately
-3. Test API connectivity
-4. Add user authentication
-5. Integrate real trade data sources
+MIT License - See [LICENSE](LICENSE) for details.

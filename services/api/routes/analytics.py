@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 from datetime import datetime, timedelta
 import sqlite3
-from backend.database import get_db
-from backend.models import GlobalTradeRiskIndex
+from database import get_db
+from models import GlobalTradeRiskIndex
 
 router = APIRouter()
 

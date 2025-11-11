@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from backend.database import get_db
-from backend.models import Article
+from database import get_db
+from models import Article
 
 router = APIRouter()
 

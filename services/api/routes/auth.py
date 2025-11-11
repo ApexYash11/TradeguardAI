@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthCredentials
+from fastapi import APIRouter, Depends, HTTPException, status, Request
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from datetime import timedelta
-from backend.database import get_db
-from backend.auth import (
+from database import get_db
+from auth import (
     verify_password,
     get_password_hash,
     create_access_token,
@@ -44,7 +44,7 @@ async def login(request: LoginRequest):
     return {"access_token": access_token, "token_type": "bearer", "user_id": user[0]}
 
 @router.get("/api/auth/me", response_model=User)
-async def get_current_user(credentials: HTTPAuthCredentials = Depends(security)):
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
     """Get current authenticated user"""
     token = credentials.credentials
     token_data = verify_token(token)

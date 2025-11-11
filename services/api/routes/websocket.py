@@ -3,8 +3,8 @@ from datetime import datetime, timedelta
 import json
 import asyncio
 import random
-from backend.database import get_db
-from backend.models import Event
+from database import get_db
+from models import Event
 
 router = APIRouter()
 
